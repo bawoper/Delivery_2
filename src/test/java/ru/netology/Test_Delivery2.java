@@ -1,6 +1,7 @@
 package ru.netology;
 
 import Data.DataGenerator;
+import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selectors;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -17,11 +18,15 @@ import static com.codeborne.selenide.Selenide.open;
 public class Test_Delivery2 {
 
     @BeforeEach
-    void setap () { open ("http://localhost:9999"); }
+
+    void setap () { Configuration.headless=true; open ("http://localhost:9999"); }
 
     @Test
+
     @DisplayName("Should successful plan meeting")
+
     void shouldSuccessfulPlanMeeting() {
+
         var  validUser = DataGenerator.Registration.generateUser("ru");
         var firstMeetingDate = DataGenerator.generateDate(4);
         var secondMeetingDate = DataGenerator.generateDate(7);
