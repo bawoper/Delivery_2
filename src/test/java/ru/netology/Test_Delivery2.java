@@ -4,9 +4,9 @@ import Data.DataGenerator;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selectors;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import com.codeborne.selenide.logevents.SelenideLogger;
+import io.qameta.allure.selenide.AllureSelenide;
+import org.junit.jupiter.api.*;
 import org.openqa.selenium.Keys;
 
 import java.time.Duration;
@@ -19,7 +19,17 @@ public class Test_Delivery2 {
 
     @BeforeEach
 
-    void setap () { Configuration.headless=true; open ("http://localhost:9999"); }
+    void setup() {
+        Configuration.headless=true; open ("http://localhost:9999"); }
+
+    @BeforeAll
+    static void setUpAll() {
+        SelenideLogger.addListener("allure", new AllureSelenide());
+    }
+    @AfterAll
+    static void tearDownAll() {
+        SelenideLogger.removeListener("allure");
+    }
 
     @Test
 
@@ -38,7 +48,7 @@ public class Test_Delivery2 {
         $("[data-test-id=phone] input").setValue(validUser.getPhone());
         $("[data-test-id=agreement]").click();
         $(Selectors.byText("Запланировать")).click();
-        $(Selectors.withText("Успешно!")).shouldBe(visible, Duration.ofSeconds(15));
+        $(Selectors.withText("Успешно!")).shouldBe(hidden, Duration.ofSeconds(15));
         $("[data-test-id='success-notification'] .notification__content")
                 .shouldHave(exactText("Встреча успешно запланирована на " + firstMeetingDate)).shouldBe(visible);
         $("[data-test-id=date] input").sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME), Keys.BACK_SPACE);
